@@ -47,10 +47,14 @@ class AddressCreator extends BaseAddressCreator
      * @param NetworkInterface $network
      * @return SegwitAddress|null
      */
-    protected function readSegwitAddress(string $strAddress, NetworkInterface $network)
+    protected function readSegwitAddress(string $strAddress, NetworkInterface $network, $enc = BECH32)
     {
         try {
-            list ($version, $program) = \BitWasp\Bech32\decodeSegwit($network->getSegwitBech32Prefix(), $strAddress);
+            if ($enc == BECH32M) {
+                list ($version, $program) = \BrooksYang\Bech32m\decodeSegwit($network->getSegwitBech32Prefix(), $strAddress, BECH32M);
+            } else {
+                list ($version, $program) = \BitWasp\Bech32\decodeSegwit($network->getSegwitBech32Prefix(), $strAddress);
+            }
 
             if (0 === $version) {
                 $wp = WitnessProgram::v0(new Buffer($program));
