@@ -117,6 +117,10 @@ class AddressCreator extends BaseAddressCreator
             return $bech32Address;
         }
 
+        if (($bech32mAddress = $this->readSegwitAddress($strAddress, $network, BECH32M))) {
+            return $bech32mAddress;
+        }
+
         throw new UnrecognizedAddressException();
     }
 }
